@@ -109,6 +109,25 @@
     color: var(--blood);
   }
 
+  .hero-index-meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+
+  .index-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: #3a3530;
+    border: 1px solid #2a2520;
+    padding: 5px 12px;
+    text-transform: uppercase;
+  }
+
   .hero-subtitle {
     font-family: 'IBM Plex Mono', monospace;
     font-size: clamp(12px, 1.5vw, 15px);
@@ -721,7 +740,14 @@
   <div class="hero-year-bg">1945</div>
   <div class="hero-eyebrow">Historical Record · Post-World War II</div>
   <h1>American<br><em>Reckoning</em></h1>
-  <p class="hero-subtitle">100 catastrophic U.S. interventions, covert operations, and atrocities since 1945 — documented, ranked, remembered.</p>
+  <p class="hero-subtitle">Since the end of World War II, the United States has conducted more than 100 military interventions, covert operations, proxy wars, and state-sanctioned atrocities across every inhabited continent. This archive documents them — ranked by scale of human cost, from the atomic incineration of Japanese cities in 1945 to the Forever Wars of the 21st century.</p>
+  <p class="hero-subtitle" style="margin-top:16px;color:var(--ash);">Each entry draws on declassified government documents, congressional investigations, independent journalism, and academic historical research. Many of these events were hidden from the American public for decades. Some remain officially unacknowledged. All of them happened.</p>
+  <div class="hero-index-meta">
+    <div class="index-tag">↓ Scroll to browse all 100 events</div>
+    <div class="index-tag">⌕ Search by name, president, or country</div>
+    <div class="index-tag">◈ Filter by category or region</div>
+    <div class="index-tag">↗ Click any card for the full account</div>
+  </div>
   <div class="hero-stats">
     <div class="stat">
       <div class="stat-num">100</div>
