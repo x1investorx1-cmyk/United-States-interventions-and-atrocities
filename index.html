@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>American Reckoning — 100 Catastrophic U.S. Interventions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f0ebe0;
+    --blood: #8b1a1a;
+    --ash: #6b6560;
+    --smoke: #b0a898;
+    --highlight: #d4a017;
+    --border: #2a2420;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-weight:300; overflow-x:hidden; }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:0.5;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh; display:flex; flex-direction:column;
+    justify-content:center; align-items:center; text-align:center;
+    padding:60px 24px; background:var(--ink); overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.012) 2px,rgba(255,255,255,0.012) 4px);
+  }
+  .bg-year {
+    position:absolute; font-family:'Playfair Display',serif;
+    font-size:clamp(120px,28vw,380px); font-weight:900;
+    color:rgba(255,255,255,0.025); letter-spacing:-0.05em;
+    user-select:none; line-height:1; top:50%; left:50%; transform:translate(-50%,-50%);
+    white-space:nowrap;
+  }
+  .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.3em; color:var(--blood); text-transform:uppercase; margin-bottom:28px; position:relative; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(42px,8vw,100px); font-weight:900; color:var(--paper); line-height:0.95; letter-spacing:-0.03em; position:relative; max-width:900px; }
+  .hero h1 em { font-style:italic; color:var(--blood); }
+  .hero-sub { font-family:'IBM Plex Mono',monospace; font-size:clamp(11px,1.4vw,14px); color:var(--smoke); max-width:560px; margin-top:28px; line-height:1.9; position:relative; }
+  .stats { display:flex; gap:48px; margin-top:52px; position:relative; flex-wrap:wrap; justify-content:center; }
+  .stat-num { font-family:'Playfair Display',serif; font-size:46px; font-weight:700; color:var(--blood); line-height:1; }
+  .stat-lbl { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:var(--smoke); text-transform:uppercase; margin-top:4px; }
+
+  /* Progress */
+  .progress-wrap { margin-top:48px; width:100%; max-width:480px; position:relative; }
+  .progress-header { display:flex; justify-content:space-between; margin-bottom:10px; }
+  .progress-label { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ash); letter-spacing:0.1em; }
+  .progress-count { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--blood); letter-spacing:0.1em; }
+  .progress-bar-bg { width:100%; height:2px; background:#1a1a1a; position:relative; overflow:hidden; }
+  .progress-bar-fill { height:100%; background:var(--blood); transition:width 0.3s ease; width:0%; }
+  .progress-title { margin-top:10px; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#2a2a2a; letter-spacing:0.1em; text-align:center; height:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; animation:pulse 2s ease-in-out infinite; }
+  .progress-hint { margin-top:6px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:#222; text-align:center; letter-spacing:0.15em; }
+  .scroll-hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; animation:bounce 2.2s ease-in-out infinite; }
+  .scroll-hint span { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#2a2a2a; text-transform:uppercase; }
+  .scroll-line { width:1px; height:40px; background:linear-gradient(to bottom,#3a3a3a,transparent); }
+
+  /* ── CONTROLS ── */
+  .controls {
+    position:sticky; top:0; z-index:100;
+    background:var(--ink); border-bottom:1px solid rgba(255,255,255,0.07);
+    padding:12px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  }
+  .search-input {
+    flex:1; min-width:200px; background:transparent;
+    border:1px solid rgba(255,255,255,0.12); color:var(--paper);
+    font-family:'IBM Plex Mono',monospace; font-size:12px;
+    padding:7px 12px; outline:none; transition:border-color 0.2s;
+  }
+  .search-input::placeholder { color:var(--ash); }
+  .search-input:focus { border-color:var(--blood); }
+  .filters { display:flex; gap:4px; flex-wrap:wrap; }
+  .filter-btn {
+    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.12em;
+    text-transform:uppercase; padding:5px 10px;
+    border:1px solid rgba(255,255,255,0.12); background:transparent;
+    color:#6b6560; cursor:pointer; transition:all 0.15s;
+  }
+  .filter-btn:hover, .filter-btn.active { background:var(--blood); border-color:var(--blood); color:white; }
+  .results-count { font-family:'IBM Plex Mono',monospace; font-size:10px; color:#3a3a3a; margin-left:auto; white-space:nowrap; }
+
+  /* ── GRID ── */
+  .main { max-width:1400px; margin:0 auto; padding:48px 20px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:3px; }
+
+  /* ── CARD ── */
+  .card { background:var(--ink); cursor:pointer; display:flex; flex-direction:column; transition:transform 0.2s ease; animation:fadeUp 0.4s ease both; }
+  .card:hover { transform:scale(1.025); z-index:10; position:relative; }
+  .card.hidden { display:none; }
+
+  /* Image container */
+  .card-img-wrap { position:relative; width:100%; height:200px; overflow:hidden; flex-shrink:0; }
+  .card-real-img { width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(60%) contrast(1.1); transition:filter 0.3s; position:absolute; inset:0; z-index:2; }
+  .card:hover .card-real-img { filter:grayscale(20%) contrast(1.15); }
+  .fallback-bg { position:absolute; inset:0; z-index:0; }
+  .fallback-bg svg { width:100%; height:100%; }
+  .svg-overlay { position:absolute; inset:0; z-index:1; display:flex; align-items:center; justify-content:center; }
+  .svg-overlay svg { width:100%; height:100%; }
+  .svg-shimmer { position:absolute; inset:0; z-index:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+  .shimmer-bar { width:60px; height:2px; animation:shimmer 1.4s ease-in-out infinite; }
+  .shimmer-icon { font-size:32px; opacity:0.18; font-family:monospace; }
+
+  .card-rank { position:absolute; top:10px; left:10px; z-index:10; background:var(--blood); color:white; font-family:'Playfair Display',serif; font-size:12px; font-weight:700; padding:2px 8px; }
+  .card-era { position:absolute; top:10px; right:10px; z-index:10; background:rgba(0,0,0,0.7); color:rgba(255,255,255,0.7); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em; padding:3px 8px; }
+  .card-body { padding:16px 18px 18px; flex:1; display:flex; flex-direction:column; border:1px solid rgba(255,255,255,0.04); border-top:none; }
+  .card-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; color:var(--paper); line-height:1.3; margin-bottom:8px; }
+  .card-desc { font-family:'IBM Plex Sans',sans-serif; font-size:11px; font-weight:300; color:var(--smoke); line-height:1.7; flex:1; }
+  .card-footer { margin-top:14px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+  .card-pres { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.1em; color:var(--highlight); text-transform:uppercase; }
+  .card-tag { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.1em; color:#3a3a3a; border:1px solid rgba(255,255,255,0.08); padding:2px 6px; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal { background:var(--ink); max-width:680px; width:100%; max-height:90vh; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.08); transform:translateY(16px); transition:transform 0.25s; }
+  .modal-overlay.open .modal { transform:translateY(0); }
+  .modal-img-wrap { position:relative; width:100%; height:280px; overflow:hidden; flex-shrink:0; }
+  .modal-real-img { width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(40%) contrast(1.1); position:absolute; inset:0; z-index:2; }
+  .modal-close { position:absolute; top:14px; right:14px; background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.15); color:white; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; transition:background 0.2s; z-index:20; }
+  .modal-close:hover { background:var(--blood); }
+  .modal-body { padding:28px; }
+  .modal-eyebrow { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:var(--blood); text-transform:uppercase; margin-bottom:10px; }
+  .modal-title { font-family:'Playfair Display',serif; font-size:clamp(20px,4vw,30px); font-weight:900; color:var(--paper); line-height:1.15; margin-bottom:6px; }
+  .modal-years { font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ash); margin-bottom:22px; }
+  .modal-meta { display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:18px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); margin-bottom:22px; }
+  .meta-label { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.2em; color:#3a3a3a; text-transform:uppercase; display:block; margin-bottom:4px; }
+  .meta-value { font-family:'IBM Plex Sans',sans-serif; font-size:12px; color:var(--paper); }
+  .modal-desc { font-family:'IBM Plex Sans',sans-serif; font-size:13px; font-weight:300; color:#b0a898; line-height:1.85; }
+  .no-results { display:none; text-align:center; padding:80px 20px; font-family:'Playfair Display',serif; font-size:24px; color:var(--ash); grid-column:1/-1; }
+
+  /* FOOTER */
+  footer { background:var(--ink); color:#3a3a3a; text-align:center; padding:40px 20px; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em; line-height:2.2; border-top:1px solid rgba(255,255,255,0.04); }
+  footer strong { color:var(--ash); }
+
+  /* ── API KEY GATE ── */
+  #apiGate {
+    position:fixed; inset:0; background:#0d0d0d; z-index:99999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:32px; text-align:center;
+  }
+  #apiGate h2 { font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,52px); font-weight:900; color:var(--paper); letter-spacing:-0.03em; line-height:1; margin-bottom:8px; }
+  #apiGate h2 em { font-style:italic; color:var(--blood); }
+  #apiGate p { font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ash); max-width:440px; line-height:1.8; margin-bottom:32px; }
+  .gate-box { background:#111; border:1px solid rgba(255,255,255,0.08); padding:32px; max-width:460px; width:100%; }
+  .gate-label { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:var(--ash); text-transform:uppercase; display:block; text-align:left; margin-bottom:8px; }
+  .gate-input {
+    width:100%; background:transparent; border:1px solid rgba(255,255,255,0.15);
+    color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:13px;
+    padding:10px 14px; outline:none; transition:border-color 0.2s; margin-bottom:12px;
+  }
+  .gate-input:focus { border-color:var(--blood); }
+  .gate-input::placeholder { color:#2a2a2a; }
+  .gate-btn {
+    width:100%; background:var(--blood); border:none; color:white;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em;
+    text-transform:uppercase; padding:12px; cursor:pointer; transition:background 0.2s;
+  }
+  .gate-btn:hover { background:#a02020; }
+  .gate-note { font-family:'IBM Plex Mono',monospace; font-size:10px; color:#2a2a2a; margin-top:14px; line-height:1.7; }
+  .gate-note a { color:#3a3a6a; text-decoration:none; }
+  .gate-note a:hover { color:var(--smoke); }
+  .gate-error { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--blood); margin-top:10px; display:none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+  @keyframes pulse { 0%,100%{opacity:0.35} 50%{opacity:0.9} }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:var(--ink)} ::-webkit-scrollbar-thumb{background:var(--blood)}
+</style>
+</head>
+<body>
+
+<!-- API KEY GATE -->
+<div id="apiGate">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.3em;color:var(--blood);text-transform:uppercase;margin-bottom:20px;">Historical Record · Post-World War II</div>
+  <h2>American<br><em>Reckoning</em></h2>
+  <p>100 catastrophic U.S. interventions, each illustrated by AI.<br>Enter your Anthropic API key to generate the illustrations.</p>
+  <div class="gate-box">
+    <span class="gate-label">Anthropic API Key</span>
+    <input class="gate-input" id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." autocomplete="off" onkeydown="if(event.key==='Enter')startApp()">
+    <button class="gate-btn" onclick="startApp()">Load App & Generate Illustrations →</button>
+    <div class="gate-error" id="gateError">Please enter a valid API key (starts with sk-ant-)</div>
+    <div class="gate-note">
+      Your key is used only in your browser — never sent to any server except Anthropic directly.<br>
+      Get a key at <a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com/keys</a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="bg-year">1945</div>
+  <div class="eyebrow">Historical Record · Post-World War II</div>
+  <h1>American<br><em>Reckoning</em></h1>
+  <p class="hero-sub">100 catastrophic U.S. interventions, covert operations &amp; atrocities since 1945 — each illustrated, documented, remembered.</p>
+  <div class="stats">
+    <div><div class="stat-num">100</div><div class="stat-lbl">Documented Events</div></div>
+    <div><div class="stat-num">80+</div><div class="stat-lbl">Years of History</div></div>
+    <div><div class="stat-num">40+</div><div class="stat-lbl">Countries Affected</div></div>
+  </div>
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-header">
+      <span class="progress-label">GENERATING ILLUSTRATIONS</span>
+      <span class="progress-count" id="progressCount">0 / 100</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
+    <div class="progress-title" id="progressTitle">Initializing…</div>
+    <div class="progress-hint">↓ Scroll down — completed cards appear instantly</div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <input class="search-input" id="searchInput" type="search" placeholder="Search events, countries, presidents…" oninput="filterCards()">
+  <div class="filters" id="filterGroup">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Military',this)">Military</button>
+    <button class="filter-btn" onclick="setFilter('CIA',this)">CIA Ops</button>
+    <button class="filter-btn" onclick="setFilter('Nuclear',this)">Nuclear</button>
+    <button class="filter-btn" onclick="setFilter('Drone',this)">Drone</button>
+    <button class="filter-btn" onclick="setFilter('Economic',this)">Economic</button>
+    <button class="filter-btn" onclick="setFilter('Latin America',this)">Latin America</button>
+    <button class="filter-btn" onclick="setFilter('Middle East',this)">Middle East</button>
+    <button class="filter-btn" onclick="setFilter('Asia',this)">Asia</button>
+    <button class="filter-btn" onclick="setFilter('Africa',this)">Africa</button>
+  </div>
+  <div class="results-count" id="resultsCount">100 events</div>
+</div>
+
+<!-- GRID -->
+<main class="main">
+  <div class="grid" id="cardGrid">
+    <div class="no-results" id="noResults">No events match your search.</div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalInner"></div>
+  </div>
+</div>
+
+<footer>
+  <strong>American Reckoning</strong> — A historical documentation project.<br>
+  Sources drawn from declassified government documents, congressional investigations,<br>
+  independent journalism, and academic historical research.<br>
+  Illustrations generated by Claude AI · This record exists so that history is not forgotten.
+</footer>
+
+<script>
+// ─── API KEY ──────────────────────────────────────────────────────────────
+let ANTHROPIC_KEY = "";
+
+function startApp() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val.startsWith('sk-ant-')) {
+    document.getElementById('gateError').style.display = 'block';
+    return;
+  }
+  ANTHROPIC_KEY = val;
+  document.getElementById('apiGate').style.display = 'none';
+  document.getElementById('top').scrollIntoView();
+}
+
+// ─── DATA ─────────────────────────────────────────────────────────────────
+const EVENTS = [
+  {rank:1,title:"Atomic Bombing of Hiroshima & Nagasaki",years:"1945",region:"Asia",tags:["Nuclear","Military"],president:"Harry S. Truman",deaths:"129,000–226,000 civilians",country:"Japan",desc:"On August 6 and 9, 1945, the U.S. dropped atomic bombs on the Japanese cities of Hiroshima and Nagasaki, instantly killing tens of thousands and condemning hundreds of thousands more to radiation sickness. It remains the only use of nuclear weapons in warfare. Survivors (hibakusha) faced decades of disease, discrimination, and trauma. The bombings accelerated Japan's surrender but sparked an enduring global debate about targeting civilian populations."},
+  {rank:2,title:"Firebombing of Tokyo (Operation Meetinghouse)",years:"1945",region:"Asia",tags:["Military"],president:"FDR / Truman",deaths:"~100,000 civilians in one night",country:"Japan",desc:"On the night of March 9–10, 1945, 279 B-29 Superfortress bombers dropped 1,665 tons of incendiary bombs on Tokyo. The resulting firestorm destroyed 16 square miles of the city, killing an estimated 80,000–100,000 civilians in a single night — more than either atomic bomb on first impact. The operation was deliberately designed to destroy densely populated downtown residential districts."},
+  {rank:3,title:"Vietnam War & Agent Orange Campaign",years:"1955–1975",region:"Asia",tags:["Military","CIA"],president:"Eisenhower, Kennedy, Johnson, Nixon, Ford",deaths:"1.3–3.5 million Vietnamese",country:"Vietnam",desc:"The U.S. dropped more bombs on Vietnam than were used in all of World War II. Over 20 years, it sprayed 20 million gallons of herbicide including Agent Orange on 4.5 million acres, poisoning the food chain and causing birth defects that persist to this day. Carpet bombing, napalm, and the Phoenix assassination program killed millions of civilians. The war ended in defeat."},
+  {rank:4,title:"Invasion of Iraq",years:"2003–2011",region:"Middle East",tags:["Military"],president:"George W. Bush",deaths:"200,000–1,000,000+",country:"Iraq",desc:"Launched on fabricated WMD claims, the invasion destroyed a functioning state, unleashed sectarian civil war, disbanded the Iraqi army creating the nucleus of ISIS, and killed hundreds of thousands. No WMDs were ever found. Over 4,400 U.S. troops died alongside a million or more Iraqis. The region remains destabilized decades later."},
+  {rank:5,title:"Philippine-American War",years:"1899–1913",region:"Asia",tags:["Military"],president:"McKinley, Roosevelt, Taft",deaths:"200,000–1,000,000 Filipinos",country:"Philippines",desc:"After defeating Spain in 1898, the U.S. purchased the Philippines for $20 million and violently suppressed Filipino independence. U.S. forces established concentration camps, burned villages, and employed 'water cure' torture. An estimated 200,000 to 1 million Filipinos died from violence, famine, and disease — a forgotten colonial atrocity."},
+  {rank:6,title:"Korean War Bombing Campaign",years:"1950–1953",region:"Asia",tags:["Military"],president:"Truman / Eisenhower",deaths:"2–4 million (majority civilian)",country:"Korea",desc:"The U.S. dropped more bombs on Korea than in the entire Pacific Theater of WWII, including 32,557 tons of napalm. Every major city in North Korea was destroyed. General Curtis LeMay estimated the U.S. killed 20% of the North Korean population. The bombing created generational trauma that continues to shape the Korean peninsula today."},
+  {rank:7,title:"CIA Coup in Iran (Operation Ajax)",years:"1953",region:"Middle East",tags:["CIA"],president:"Dwight D. Eisenhower",deaths:"Hundreds in aftermath; long-term geopolitical catastrophe",country:"Iran",desc:"The CIA and British MI6 overthrew Iran's democratically elected PM Mosaddegh, who had nationalized Iranian oil. The U.S. installed the authoritarian Shah and helped establish SAVAK, his brutal secret police. This single act reshaped the Middle East for generations and led directly to the 1979 Islamic Revolution and decades of anti-American resentment."},
+  {rank:8,title:"CIA Coup in Guatemala",years:"1954",region:"Latin America",tags:["CIA","Economic"],president:"Dwight D. Eisenhower",deaths:"200,000+ in ensuing civil war",country:"Guatemala",desc:"The CIA overthrew democratically elected President Árbenz over land reforms affecting the United Fruit Company. The coup triggered a 36-year civil war in which over 200,000 people — overwhelmingly indigenous Maya — were killed. UN investigators ruled the Guatemalan state committed genocide. United Fruit Company lobbyists had direct access to the Eisenhower administration."},
+  {rank:9,title:"My Lai Massacre",years:"1968",region:"Asia",tags:["Military"],president:"Lyndon B. Johnson",deaths:"347–504 unarmed civilians",country:"Vietnam",desc:"On March 16, 1968, U.S. Army soldiers from Charlie Company systematically murdered between 347 and 504 unarmed Vietnamese civilians — including women, children, and elderly. Women were gang-raped before being shot. The massacre was covered up for a year. Only Lt. William Calley was convicted, serving just 3.5 years under house arrest. It became a symbol of the war's moral collapse."},
+  {rank:10,title:"Arming Afghan Mujahideen (Operation Cyclone)",years:"1979–1989",region:"Middle East",tags:["CIA","Military"],president:"Carter, Reagan",deaths:"1–2 million Afghans; blowback: 9/11",country:"Afghanistan",desc:"The CIA funneled over $3 billion to Afghan mujahideen fighters, recruiting and arming extremist factions. When the Soviets left, the U.S. abandoned Afghanistan, enabling the Taliban to take power and al-Qaeda to use it as a base for the September 11 attacks. CIA Director Robert Gates later admitted the U.S. encouraged Afghan resistance before the Soviet invasion."},
+  {rank:11,title:"Phoenix Program — Vietnam",years:"1965–1972",region:"Asia",tags:["CIA","Military"],president:"Johnson, Nixon",deaths:"20,587 confirmed 'neutralized'; many tortured",country:"Vietnam",desc:"The CIA's Phoenix Program targeted the Viet Cong political infrastructure through assassination, torture, and mass imprisonment. By CIA's own count, 20,587 were killed. Suspects were tortured using electric shock, water torture, and insertion of objects into wounds. CIA Director Colby later admitted the program had significant targeting errors — many victims were civilians denounced by local rivals."},
+  {rank:12,title:"Secret Bombing of Laos",years:"1964–1973",region:"Asia",tags:["Military"],president:"Johnson, Nixon",deaths:"50,000+ civilians; UXO kills to this day",country:"Laos",desc:"The U.S. conducted a secret bombing campaign making Laos the most heavily bombed country per capita in history. Over 2 million tons of ordnance was dropped, equivalent to a planeload every 8 minutes for 9 years. An estimated 30% of bombs didn't explode. Since 1973, unexploded cluster munitions have killed or injured over 20,000 Laotians. The bombing was secret and illegal — Congress was never informed."},
+  {rank:13,title:"Bombing of Cambodia",years:"1969–1973",region:"Asia",tags:["Military"],president:"Nixon",deaths:"150,000–500,000 civilians",country:"Cambodia",desc:"Operation Menu secretly dropped 2.75 million tons of bombs on Cambodia — more than all Allied bombing in WWII combined. The campaign was kept secret from Congress. Mass civilian casualties contributed directly to the rise of the Khmer Rouge, whose genocide killed 1.5–2 million people. Henry Kissinger was the primary architect."},
+  {rank:14,title:"CIA Coup in Chile & Pinochet Regime",years:"1973",region:"Latin America",tags:["CIA","Economic"],president:"Richard Nixon",deaths:"3,000+ killed; 40,000+ tortured",country:"Chile",desc:"The CIA backed Pinochet's September 11, 1973 coup against elected socialist Allende. Under the U.S.-backed Pinochet regime, at least 3,000 were executed or disappeared, 40,000 tortured, and hundreds of thousands exiled. Declassified documents confirmed full U.S. orchestration. Nixon's CIA director Richard Helms lied to Congress about the agency's involvement."},
+  {rank:15,title:"Invasion of Panama",years:"1989–1990",region:"Latin America",tags:["Military"],president:"George H.W. Bush",deaths:"500–4,000 Panamanian civilians",country:"Panama",desc:"The U.S. invaded Panama to depose Manuel Noriega — a former CIA asset turned inconvenient drug trafficker. The El Chorrillo neighborhood was incinerated; thousands were left homeless. The UN General Assembly condemned the invasion as a flagrant violation of international law. Noriega was brought to Miami for drug trafficking — the same crimes he'd committed while on the CIA payroll."},
+  {rank:16,title:"Iraq Sanctions (1990–2003)",years:"1990–2003",region:"Middle East",tags:["Economic"],president:"Bush Sr., Clinton, Bush Jr.",deaths:"500,000+ children (UNICEF estimate)",country:"Iraq",desc:"The U.S.-led sanctions regime blocked Iraq from importing food, medicine, and water infrastructure. UNICEF estimated 500,000 Iraqi children under five died as a direct result. When Secretary Albright was asked on 60 Minutes whether the price was worth it, she replied: 'We think the price is worth it.' The sanctions devastated Iraq's once-modern infrastructure without removing Saddam Hussein from power."},
+  {rank:17,title:"Gulf War & Highway of Death",years:"1991",region:"Middle East",tags:["Military"],president:"George H.W. Bush",deaths:"20,000–35,000 Iraqi soldiers; thousands of civilians",country:"Iraq",desc:"During the Gulf War's final hours, U.S. forces bombed retreating Iraqi soldiers on Highway 80, creating the 'Highway of Death.' Thousands of soldiers — many already surrendering — were killed in their vehicles. Separately, U.S. bombing destroyed Iraq's water treatment infrastructure, leading to widespread disease."},
+  {rank:18,title:"CIA Backing of Indonesian Mass Killings",years:"1965–1966",region:"Asia",tags:["CIA"],president:"Lyndon B. Johnson",deaths:"500,000–1,000,000",country:"Indonesia",desc:"The CIA provided lists of Communist Party members to Indonesian military officers who massacred between 500,000 and 1 million people — one of the 20th century's worst mass killings. The U.S. embassy in Jakarta compiled lists of up to 5,000 PKI officials and transmitted them to the Indonesian army. A State Department official later admitted: 'We gave them the guns and told them to go ahead.'"},
+  {rank:19,title:"Support for Saddam's Chemical Weapons",years:"1983–1988",region:"Middle East",tags:["CIA","Military"],president:"Ronald Reagan",deaths:"Thousands of Iranians and Kurds",country:"Iraq",desc:"Even as Saddam Hussein deployed chemical weapons against Iranians and Kurds — including the Halabja massacre killing 3,000–5,000 Kurds — the Reagan administration continued providing battlefield intelligence and economic support. Donald Rumsfeld met with Saddam as a special envoy in 1983 and 1984, even as chemical weapons use was confirmed."},
+  {rank:20,title:"Nicaragua: Funding the Contras",years:"1981–1990",region:"Latin America",tags:["CIA","Economic"],president:"Ronald Reagan",deaths:"30,000+ Nicaraguans",country:"Nicaragua",desc:"The Reagan administration illegally funded the Contras — notorious for terrorism, torture, and murder of civilians, including teachers, health workers, and priests. The CIA mined Nicaraguan harbors, prompting the ICJ to rule against the U.S. The Iran-Contra affair revealed weapons were sold to Iran to secretly fund the Contras, circumventing a congressional ban."},
+  {rank:21,title:"Bay of Pigs Invasion",years:"1961",region:"Latin America",tags:["CIA"],president:"John F. Kennedy",deaths:"~200 killed; diplomatic catastrophe",country:"Cuba",desc:"The CIA trained 1,400 Cuban exiles to invade Cuba and overthrow Fidel Castro. The operation was a catastrophic failure: 114 killed, 1,113 captured within three days. The humiliation pushed Cuba closer to the Soviet Union and nearly led to nuclear war during the Cuban Missile Crisis a year later."},
+  {rank:22,title:"Occupation of Haiti",years:"1915–1934",region:"Latin America",tags:["Military"],president:"Wilson, Harding, Coolidge, Hoover",deaths:"15,000+ Haitians",country:"Haiti",desc:"U.S. Marines occupied Haiti for 19 years, imposing forced labor, disbanding the Haitian legislature at gunpoint, and rewriting the constitution to allow foreign land ownership. Marines killed approximately 15,000 Haitians who resisted. The occupation dismantled Haitian institutions and created conditions for decades of political instability."},
+  {rank:23,title:"Drone Strike Program",years:"2004–present",region:"Middle East",tags:["Drone","Military"],president:"Bush Jr., Obama, Trump, Biden",deaths:"8,000–17,000; 1,000–1,700 civilians",country:"Pakistan, Yemen, Somalia",desc:"U.S. drone strikes in countries the U.S. was not officially at war with — Pakistan, Yemen, Somalia — killed thousands. The 'double-tap' tactic struck rescuers arriving at initial strike scenes. The Bureau of Investigative Journalism documented at least 910–2,200 civilian deaths in Pakistan alone. The program operated under secret legal memos with virtually no accountability."},
+  {rank:24,title:"Abu Ghraib Torture and Prisoner Abuse",years:"2003–2004",region:"Middle East",tags:["Military"],president:"George W. Bush",deaths:"Multiple deaths; widespread torture",country:"Iraq",desc:"U.S. Army soldiers and CIA officers at Abu Ghraib subjected Iraqi prisoners to physical abuse, sexual humiliation, torture, and murder. Photos showed naked prisoners stacked in pyramids, attached to leashes, and subjected to electric shocks. At least 100 detainees died in U.S. custody across Iraq and Afghanistan. Despite abuse being authorized at high levels, only low-ranking soldiers were prosecuted."},
+  {rank:25,title:"CIA Enhanced Interrogation / Torture Program",years:"2001–2007",region:"Middle East",tags:["CIA"],president:"George W. Bush",deaths:"Multiple deaths; 119 detained, all abused",country:"Multiple countries (black sites)",desc:"The CIA established secret 'black site' prisons worldwide and subjected detainees to waterboarding, sleep deprivation up to 180 hours, walling, rectal feeding, and mock executions. The Senate Intelligence Committee's 2014 report found the program was far more brutal than reported and the CIA repeatedly lied to Congress and the White House about its effectiveness."},
+  {rank:26,title:"El Salvador Death Squads",years:"1979–1992",region:"Latin America",tags:["CIA","Military"],president:"Carter, Reagan, Bush Sr.",deaths:"75,000+ (UN Truth Commission)",country:"El Salvador",desc:"The U.S. provided over $6 billion in military aid to the Salvadoran government even as death squads massacred civilians. The El Mozote massacre in December 1981, carried out by the U.S.-trained Atlacatl Battalion, killed approximately 800 civilians including 456 children. The Reagan administration covered up the massacre."},
+  {rank:27,title:"Operation Condor: South American Terror Network",years:"1975–1983",region:"Latin America",tags:["CIA"],president:"Ford, Carter",deaths:"60,000+ killed; 400,000+ imprisoned",country:"Argentina, Chile, Uruguay, Brazil, Bolivia, Paraguay",desc:"Operation Condor was a U.S.-backed network of South American dictatorships coordinating the kidnapping, torture, and assassination of leftists across national borders. Henry Kissinger effectively gave the program a green light in a 1976 meeting. At least 60,000 people were killed and 400,000 imprisoned. Targets were thrown alive from aircraft over the ocean."},
+  {rank:28,title:"Invasion of Afghanistan",years:"2001–2021",region:"Middle East",tags:["Military"],president:"Bush Jr., Obama, Trump, Biden",deaths:"241,000+ (Brown University Cost of War Project)",country:"Afghanistan",desc:"The 20-year war — the longest in American history — ended with the Taliban taking Kabul within days of the U.S. withdrawal, leaving behind the exact conditions that existed before the invasion. Brown University documented 241,000 deaths. The war cost over $2 trillion. The war ended in total defeat."},
+  {rank:29,title:"MK-Ultra Mind Control Program",years:"1953–1973",region:"CIA",tags:["CIA"],president:"Eisenhower, Kennedy, Johnson, Nixon",deaths:"Unknown; many destroyed lives",country:"USA & Canada",desc:"The CIA secretly dosed unwitting American and Canadian citizens with LSD and other drugs, subjected them to electroconvulsive therapy, sensory deprivation, and psychological torture. At least one person died after being secretly drugged. CIA Director Helms ordered the destruction of most MK-Ultra files in 1973 before they could be reviewed."},
+  {rank:30,title:"Overthrow of Congolese PM Lumumba",years:"1960–1961",region:"Africa",tags:["CIA"],president:"Dwight D. Eisenhower",deaths:"Political assassination; millions in ensuing conflicts",country:"DR Congo",desc:"The CIA conspired to assassinate Congolese Prime Minister Patrice Lumumba, Africa's most prominent independence leader. Though a CIA poisoning plan didn't succeed, the agency facilitated his capture and execution. The resulting chaos produced decades of conflict including the brutal Mobutu dictatorship that the U.S. actively supported."},
+  {rank:31,title:"Support for Apartheid South Africa",years:"1948–1991",region:"Africa",tags:["Economic","CIA"],president:"Multiple presidents",deaths:"Tens of thousands; decades of oppression",country:"South Africa",desc:"The U.S. supported apartheid South Africa throughout the Cold War, opposing UN sanctions. The CIA helped locate Nelson Mandela in 1962, leading to his 27-year imprisonment. Reagan vetoed anti-apartheid sanctions in 1986. The U.S. also provided nuclear technology helping South Africa develop nuclear weapons."},
+  {rank:32,title:"Honduras: Battalion 316 Death Squad",years:"1980–1984",region:"Latin America",tags:["CIA","Military"],president:"Ronald Reagan",deaths:"Hundreds; widespread torture",country:"Honduras",desc:"The CIA trained and advised Battalion 316, a Honduran military death squad that kidnapped, tortured, and murdered political opponents using electric shock, near-drowning, and sexual torture. CIA's role was documented in a 1995 Baltimore Sun investigation based on declassified files."},
+  {rank:33,title:"Bombing of Libya (2011)",years:"2011",region:"Africa",tags:["Military"],president:"Barack Obama",deaths:"Thousands; state collapse, slave trade emerged",country:"Libya",desc:"NATO's military intervention, led by the U.S., destroyed Gaddafi's government. What was authorized as a 'no-fly zone' became a full regime-change operation. Libya fractured into competing militias, became a hub for weapons smuggling, and open-air slave markets emerged by 2017. The intervention created a failed state with no functioning government."},
+  {rank:34,title:"Syria: Covert Arming of Rebels",years:"2012–2017",region:"Middle East",tags:["CIA","Military"],president:"Obama / Trump",deaths:"Contributed to 500,000+ deaths in civil war",country:"Syria",desc:"The CIA's billion-dollar program to arm Syrian rebels frequently saw weapons end up with al-Qaeda affiliates. The program prolonged a devastating civil war killing 500,000+ and displacing 12 million. Congressional investigators found it was one of the largest covert arms programs in history with little oversight."},
+  {rank:35,title:"Occupation of Dominican Republic",years:"1916–1924 & 1965",region:"Latin America",tags:["Military"],president:"Wilson; LBJ",deaths:"Hundreds of civilians; democratic government toppled",country:"Dominican Republic",desc:"The U.S. occupied the Dominican Republic for 8 years starting in 1916. In 1965, Johnson sent 22,000 troops to crush a popular uprising seeking to restore democratically elected President Bosch. The UN condemned the invasion as interference in a democratic process."},
+  {rank:36,title:"Support for Pol Pot / Khmer Rouge",years:"1979–1991",region:"Asia",tags:["CIA","Economic"],president:"Carter, Reagan, Bush Sr.",deaths:"Prolonged Khmer Rouge after genocide",country:"Cambodia",desc:"After Vietnam ended the Khmer Rouge genocide, the U.S. sided with the genocidal regime at the UN, recognizing them as Cambodia's legitimate government. The U.S. armed, funded, and diplomatically supported Khmer Rouge forces throughout the 1980s as a proxy against Vietnam."},
+  {rank:37,title:"Invasion of Grenada",years:"1983",region:"Latin America",tags:["Military"],president:"Ronald Reagan",deaths:"~45 Grenadians killed; condemned by UN",country:"Grenada",desc:"The U.S. invaded the tiny Caribbean island of Grenada to overthrow a Marxist government. The UN General Assembly voted 108–9 to condemn the invasion as a flagrant violation of international law. Even close ally Margaret Thatcher strongly opposed it."},
+  {rank:38,title:"Support for Suharto's East Timor Occupation",years:"1975–1999",region:"Asia",tags:["CIA","Military"],president:"Ford through Clinton",deaths:"100,000–180,000 (1/3 of East Timorese population)",country:"East Timor / Indonesia",desc:"President Ford and Secretary Kissinger met with Suharto the day before Indonesia invaded East Timor and effectively gave approval. The U.S. continued supplying weapons despite the killing of approximately one-third of East Timor's population over 24 years."},
+  {rank:39,title:"Sabotage of Palestinian Democracy (2006)",years:"2006–2007",region:"Middle East",tags:["CIA","Economic"],president:"George W. Bush",deaths:"Political destabilization; ongoing conflict",country:"Palestine",desc:"After Hamas won free and fair 2006 Palestinian elections, the U.S. worked with Israel and Fatah to undermine the Hamas government, arming Fatah to stage a coup. The result destroyed Palestinian political reconciliation. A senior American official later said: 'What happened was not what we had intended.'"},
+  {rank:40,title:"CIA Destabilization of Bolivia (2019)",years:"2019",region:"Latin America",tags:["CIA"],president:"Donald Trump",deaths:"~35 protesters killed in post-coup violence",country:"Bolivia",desc:"When Bolivian President Evo Morales — who nationalized Bolivia's lithium reserves and reduced poverty — was forced from power in 2019, U.S. involvement was strongly indicated. The Trump administration immediately recognized the unelected interim government. Morales's party won the next election by a landslide."},
+  {rank:41,title:"U.S. Support for Saudi Arabia in Yemen",years:"2015–present",region:"Middle East",tags:["Military","Economic"],president:"Obama, Trump, Biden",deaths:"150,000–377,000 (UN estimate)",country:"Yemen",desc:"The U.S. provided Saudi Arabia with weapons, intelligence, and aerial refueling for its Yemen bombing campaign causing the world's worst humanitarian crisis. U.S.-supplied bombs killed children on school buses, at weddings, and at hospitals. The U.S. vetoed UN ceasefire resolutions."},
+  {rank:42,title:"Fallujah Sieges & Cancer Epidemic",years:"2004",region:"Middle East",tags:["Military"],president:"George W. Bush",deaths:"800–6,000 residents; long-term cancer epidemic",country:"Iraq",desc:"The Second Battle of Fallujah involved U.S. forces using white phosphorus and depleted uranium munitions. Studies found cancer rates and birth defects in Fallujah surpassed those of Hiroshima and Nagasaki. The operation displaced 300,000 residents."},
+  {rank:43,title:"CIA Backing of Haitian Dictator Duvalier",years:"1957–1971",region:"Latin America",tags:["CIA","Economic"],president:"Eisenhower, Kennedy, Johnson, Nixon",deaths:"30,000–60,000 killed",country:"Haiti",desc:"François 'Papa Doc' Duvalier's brutal dictatorship was sustained by U.S. support despite his Tonton Macoute private death squad murdering and raping anyone who challenged him. An estimated 30,000–60,000 Haitians were killed while the U.S. supported him as an anti-communist bulwark."},
+  {rank:44,title:"Orlando Letelier Assassination (Washington D.C.)",years:"1976",region:"Latin America",tags:["CIA"],president:"Gerald Ford / Jimmy Carter",deaths:"2 killed on U.S. soil",country:"USA (Chilean state terrorism)",desc:"Chilean DINA secret police, with CIA knowledge, detonated a car bomb on Embassy Row in Washington D.C., killing former Chilean foreign minister Letelier and his American colleague Ronni Moffitt. It was an act of state terrorism on American soil — the worst act of foreign terrorism on U.S. soil before 9/11."},
+  {rank:45,title:"U.S. Support for Guatemalan Genocide",years:"1981–1983",region:"Latin America",tags:["CIA","Military"],president:"Ronald Reagan",deaths:"70,000–200,000 indigenous Maya killed",country:"Guatemala",desc:"As dictator Ríos Montt systematically massacred indigenous Maya communities in a UN-classified genocide, Reagan called him 'a man of great personal integrity.' The U.S. continued military aid through intermediaries. Ríos Montt was later convicted of genocide."},
+  {rank:46,title:"Destruction of Mosul",years:"2016–2017",region:"Middle East",tags:["Military","Drone"],president:"Obama / Trump",deaths:"9,000–11,000 civilians",country:"Iraq",desc:"The U.S.-led coalition's air campaign to retake Mosul from ISIS involved some of the most intensive urban bombing since World War II. An AP investigation documented at least 9,000 civilian deaths. The city was left in ruins, and the military systematically misreported civilian deaths to the public."},
+  {rank:47,title:"Kunduz Hospital Bombing (MSF)",years:"2015",region:"Middle East",tags:["Military","Drone"],president:"Barack Obama",deaths:"42 killed (patients and medical staff)",country:"Afghanistan",desc:"A U.S. AC-130 gunship attacked a Médecins Sans Frontières hospital in Kunduz for 68 minutes, killing 42 people including doctors, nurses, and patients. MSF had repeatedly provided GPS coordinates to U.S. forces. MSF called it a war crime. The military prosecuted no one."},
+  {rank:48,title:"CIA Torture at 'Salt Pit' Black Site",years:"2002–2003",region:"Middle East",tags:["CIA"],president:"George W. Bush",deaths:"At least 1 confirmed death from hypothermia",country:"Afghanistan",desc:"At the CIA's secret 'Salt Pit' prison near Kabul, Afghan detainee Gul Rahman was stripped, chained to a wall in near-freezing temperatures, and died of hypothermia. The CIA officer who ordered the treatment was later recommended for a cash bonus. No one was prosecuted for Rahman's death."},
+  {rank:49,title:"Brazilian Military Coup (Operation Brother Sam)",years:"1964",region:"Latin America",tags:["CIA","Military"],president:"Lyndon B. Johnson",deaths:"Hundreds; 20-year military dictatorship",country:"Brazil",desc:"The U.S. helped organize a military coup against Brazil's elected president Goulart and had a naval task force positioned to assist if needed. Johnson congratulated the coup plotters before they consolidated power. The resulting dictatorship lasted 21 years, killing hundreds, torturing thousands, and disappearing political opponents."},
+  {rank:50,title:"Radiation Experiments on American Citizens",years:"1944–1974",region:"Nuclear",tags:["Nuclear","CIA"],president:"Roosevelt through Nixon",deaths:"Unknown; thousands subjected without consent",country:"USA",desc:"U.S. government agencies secretly subjected thousands of Americans to radiation experiments without consent. Patients were injected with plutonium. Mentally disabled children were fed radioactive milk. Soldiers were ordered to stand near nuclear test detonations. The experiments were revealed by a 1986 congressional investigation."},
+  {rank:51,title:"Support for Mobutu's Kleptocracy in Congo",years:"1965–1997",region:"Africa",tags:["CIA","Economic"],president:"Johnson through Clinton",deaths:"Millions in subsequent Congo wars",country:"DR Congo",desc:"After participating in Lumumba's assassination, the U.S. backed Mobutu's 32-year kleptocratic dictatorship. Mobutu looted an estimated $5 billion while his people starved. The U.S. continued support because Mobutu allowed the CIA to use Congo as a staging ground for operations across Africa."},
+  {rank:52,title:"Testing Biological Weapons on U.S. Cities",years:"1949–1968",region:"Nuclear",tags:["Nuclear","Military"],president:"Truman through Johnson",deaths:"Multiple deaths; unknown long-term casualties",country:"USA",desc:"The U.S. Army conducted hundreds of secret biological and chemical weapons tests on American cities without public knowledge or consent. In 1950, the Army sprayed bacteria over San Francisco, killing one person. In 1966, bacteria were released in the New York City subway system."},
+  {rank:53,title:"Tuskegee Syphilis Experiment",years:"1932–1972",region:"CIA",tags:["CIA"],president:"Multiple presidents",deaths:"~128 directly; legacy of medical distrust",country:"USA",desc:"For 40 years, the U.S. Public Health Service deliberately withheld penicillin from 399 Black men with syphilis in Tuskegee, Alabama. Subjects were not told their diagnosis. Even after penicillin became standard care in 1947, treatment was denied. 128 died, 40 wives were infected, 19 children were born with congenital syphilis."},
+  {rank:54,title:"COINTELPRO — FBI Suppression of Civil Rights",years:"1956–1971",region:"CIA",tags:["CIA"],president:"Eisenhower, Kennedy, Johnson, Nixon",deaths:"Multiple activists killed; civil rights movement undermined",country:"USA",desc:"The FBI's COINTELPRO program conducted illegal surveillance, infiltration, and disruption of civil rights and antiwar organizations. The FBI sent MLK Jr. a letter suggesting he commit suicide, facilitated the murder of Black Panther leader Fred Hampton, and broke apart political organizations through disinformation campaigns."},
+  {rank:55,title:"Gulf of Tonkin Incident Fabrication",years:"1964",region:"Asia",tags:["Military"],president:"Lyndon B. Johnson",deaths:"Provided pretext for entire Vietnam War — millions died",country:"Vietnam",desc:"The Johnson administration fabricated a second North Vietnamese attack on USS Maddox to justify escalating the Vietnam War. NSA documents declassified in 2005 confirmed the attack never occurred. The lie launched an escalation that would kill 3–4 million people. Defense Secretary McNamara later admitted: 'It never happened.'"},
+  {rank:56,title:"Napalm in Korea and Vietnam",years:"1950–1972",region:"Asia",tags:["Military"],president:"Truman through Nixon",deaths:"Unknown thousands of civilians burned alive",country:"Korea, Vietnam",desc:"The U.S. dropped 32,557 tons of napalm on Korea and approximately 388,000 tons on Vietnam. Nick Ut's 1972 Pulitzer-winning photograph of nine-year-old Kim Phuc running naked from a napalm strike became one of history's most iconic images. Napalm sticks to flesh and burns at 800–1,200°C, incinerating civilians alive."},
+  {rank:57,title:"Assassination of Thomas Sankara",years:"1987",region:"Africa",tags:["CIA"],president:"Ronald Reagan",deaths:"Political assassination; reversed poverty reduction",country:"Burkina Faso",desc:"Thomas Sankara, Burkina Faso's revolutionary president who vaccinated 2.5 million children, planted 10 million trees, and nationalized land was assassinated in a coup. Declassified U.S. and French documents strongly suggest Western intelligence involvement. He was killed because he was succeeding at independent African development."},
+  {rank:58,title:"U.S. Destabilization of Venezuela",years:"2002–present",region:"Latin America",tags:["CIA","Economic"],president:"Bush Jr., Obama, Trump, Biden",deaths:"Thousands; sanctions-related medicine shortages",country:"Venezuela",desc:"The CIA backed a 2002 coup against elected President Chávez. The U.S. has since imposed sweeping sanctions devastating the civilian economy. The Center for Economic and Policy Research estimated U.S. sanctions caused 40,000 excess deaths in 2017–2018 alone. The U.S. recognized a man who never ran for president as 'interim president.'"},
+  {rank:59,title:"Backing the Thai Military Coup",years:"2014",region:"Asia",tags:["CIA","Military"],president:"Barack Obama",deaths:"Democracy ended; political repression",country:"Thailand",desc:"When the Thai military overthrew the elected government of Yingluck Shinawatra in 2014, the U.S. response was notably muted despite the suspension of the constitution, arrest of elected officials, and imposition of martial law. The U.S. continued military cooperation, prioritizing strategic bases over democratic principles."},
+  {rank:60,title:"Bombing and Proxy War in Somalia",years:"1993–present",region:"Africa",tags:["Military","Drone"],president:"Clinton through Biden",deaths:"Thousands of civilians",country:"Somalia",desc:"From Black Hawk Down in 1993 to ongoing drone strikes, the U.S. has repeatedly intervened in Somalia. In 2006, the U.S. backed an Ethiopian invasion that destroyed the only stable governing force and created conditions for al-Shabaab's rise. The U.S. has conducted over 250 air strikes in Somalia since 2007."},
+  {rank:61,title:"U.S. Support for Egypt After Coup",years:"2013–present",region:"Middle East",tags:["Military","Economic"],president:"Obama, Trump, Biden",deaths:"Hundreds killed at Rabaa massacre; thousands imprisoned",country:"Egypt",desc:"When General el-Sisi overthrew Egypt's elected government, U.S. officials refused to call it a 'coup' to avoid cutting off $1.5 billion in annual military aid. The subsequent Rabaa massacre killed 800–1,000 protesters in a single day — Human Rights Watch called it one of the largest mass killings of demonstrators in recent history."},
+  {rank:62,title:"CIA Assassination of Che Guevara",years:"1967",region:"Latin America",tags:["CIA"],president:"Lyndon B. Johnson",deaths:"Political assassination",country:"Bolivia",desc:"The CIA, working with U.S. Army-trained Bolivian special forces, tracked down, captured, and executed Che Guevara in Bolivia. The operation was led by CIA agent Félix Rodríguez. After Guevara was captured and wounded, Bolivian officials received instructions to execute him. His hands were cut off for fingerprint verification."},
+  {rank:63,title:"Operation Gladio: NATO False Flag Terror Networks",years:"1956–1990",region:"CIA",tags:["CIA","Military"],president:"Multiple presidents",deaths:"Hundreds in connected European terrorist attacks",country:"Italy, Belgium, throughout Europe",desc:"The CIA and NATO established secret 'stay-behind' armies throughout Europe linked to terrorism blamed on leftists — the 'strategy of tension.' The 1980 Bologna train station bombing killed 85 people; Italian courts implicated the Gladio network. Italian Prime Minister Andreotti confirmed Gladio's existence in 1990."},
+  {rank:64,title:"Backing the Marcos Dictatorship in Philippines",years:"1972–1986",region:"Asia",tags:["CIA","Economic"],president:"Nixon, Ford, Carter, Reagan",deaths:"3,257 killed; 70,000+ imprisoned; 34,000 tortured",country:"Philippines",desc:"The U.S. backed Marcos's 14-year dictatorship killing over 3,000, imprisoning 70,000, and torturing 34,000. Marcos and Imelda plundered $5–10 billion from the Philippines. Reagan called the rigged 1986 election 'clean and fair' even as international observers documented massive fraud."},
+  {rank:65,title:"Operation Paperclip — Nazi Scientists Integration",years:"1945–1959",region:"CIA",tags:["CIA","Military"],president:"Truman, Eisenhower",deaths:"Indirect — Cold War program based on Nazi research",country:"USA/West Germany",desc:"After WWII, the U.S. secretly brought over 1,600 Nazi scientists to America under Operation Paperclip, sanitizing their war crimes records. Werner von Braun, who used concentration camp slave labor where thousands died, became NASA's director. Dozens of scientists who performed lethal experiments on prisoners received security clearances."},
+  {rank:66,title:"Marshall Islands Nuclear Tests",years:"1946–1958",region:"Nuclear",tags:["Nuclear"],president:"Truman, Eisenhower",deaths:"Long-term radiation cancers; islands uninhabitable",country:"Marshall Islands",desc:"The U.S. detonated 67 nuclear weapons at the Marshall Islands including the 1954 Castle Bravo test 1,000 times more powerful than Hiroshima. Marshallese people were removed from their islands and told it was 'for the good of mankind.' Many remain displaced; some islands are still too radioactive to inhabit."},
+  {rank:67,title:"U.S. Support for Turkish Suppression of Kurds",years:"1984–present",region:"Middle East",tags:["Military","Economic"],president:"Multiple presidents",deaths:"40,000+ killed in the conflict",country:"Turkey/Kurdistan",desc:"The U.S. provided Turkey with $40+ billion in military assistance even as Turkey's military conducted operations against Kurdish civilians. When Turkey used U.S.-supplied F-16s to bomb Kurdish communities in Syria — the very forces the U.S. relied on to defeat ISIS — Washington issued mild protests while continuing arms sales."},
+  {rank:68,title:"CIA Drug Running in Central America",years:"1984–1988",region:"Latin America",tags:["CIA"],president:"Ronald Reagan",deaths:"Contributed to crack cocaine epidemic in U.S. cities",country:"USA/Nicaragua/Honduras",desc:"A 1998 Senate investigation concluded the CIA tolerated Contra drug trafficking into the United States. CIA Inspector General Hitz admitted an agreement existed not to report drug crimes by CIA assets. Journalist Gary Webb documented how Contra cocaine traffickers supplied South Central Los Angeles, contributing to the crack epidemic."},
+  {rank:69,title:"Bombing of Al-Shifa Pharmaceutical Plant, Sudan",years:"1998",region:"Africa",tags:["Military"],president:"Bill Clinton",deaths:"Hundreds from medicine shortage",country:"Sudan",desc:"The Clinton administration fired 13 cruise missiles at Sudan's Al-Shifa pharmaceutical plant claiming it produced chemical weapons. The evidence was a single soil sample. The plant produced 50–90% of Sudan's medicines. International experts concluded it had no connection to chemical weapons production."},
+  {rank:70,title:"Guatemalan Syphilis Experiments",years:"1946–1948",region:"Latin America",tags:["CIA"],president:"Harry S. Truman",deaths:"83 deaths; 1,308 Guatemalans deliberately infected",country:"Guatemala",desc:"The same U.S. doctor running the Tuskegee study deliberately infected 1,308 Guatemalan prisoners, soldiers, and mental patients with syphilis without consent. At least 83 died. The experiments were kept secret for 60 years. President Obama personally called Guatemala's president to apologize."},
+  {rank:71,title:"Shooting Down of Iran Air Flight 655",years:"1988",region:"Middle East",tags:["Military"],president:"Ronald Reagan",deaths:"290 civilian passengers and crew killed",country:"Iran",desc:"The USS Vincennes shot down Iran Air Flight 655, a civilian Airbus A300, over Iranian territorial waters, killing all 290 passengers including 66 children. The U.S. initially lied about the circumstances. The captain was awarded the Legion of Merit. Bush Sr. said: 'I will never apologize for the United States. I don't care what the facts are.'"},
+  {rank:72,title:"U.S. Support for Morocco's Occupation of Western Sahara",years:"1975–present",region:"Africa",tags:["Military","Economic"],president:"Multiple presidents",deaths:"Tens of thousands; 165,000+ refugees",country:"Western Sahara / Morocco",desc:"The U.S. has consistently backed Morocco's illegal occupation of Western Sahara, blocking UN Security Council sanctions. Trump recognized Morocco's 'sovereignty' over Western Sahara in 2020 in exchange for Israel normalization. 165,000 Sahrawi refugees remain in desert camps after 50 years of occupation."},
+  {rank:73,title:"El Mozote Massacre & Cover-Up",years:"1981",region:"Latin America",tags:["Military","CIA"],president:"Ronald Reagan",deaths:"~800 civilians massacred (456 children)",country:"El Salvador",desc:"The U.S.-trained Atlacatl Battalion massacred approximately 800 civilians — including 456 children, the youngest 2 months old — in El Mozote in December 1981. The Reagan administration immediately denied and covered up the massacre. Forensic excavations in the 1990s confirmed the killings."},
+  {rank:74,title:"School of the Americas (WHINSEC)",years:"1946–present",region:"Latin America",tags:["CIA","Military"],president:"Multiple presidents",deaths:"Connected graduates: 100,000+ Latin American victims",country:"USA (Fort Benning, Georgia)",desc:"The U.S. Army's School of the Americas trained over 64,000 Latin American military officers in counterinsurgency and interrogation. Graduates include the El Mozote massacre perpetrators, the assassins of Archbishop Romero, the Pinochet coup mastermind, and Panama's Noriega. Critics call it 'the School of Assassins.'"},
+  {rank:75,title:"Cuban Embargo",years:"1962–present",region:"Latin America",tags:["Economic"],president:"Kennedy through Biden",deaths:"Estimated 3,478 Cubans from embargo-related shortages",country:"Cuba",desc:"The U.S. has maintained a comprehensive economic embargo on Cuba since 1962 — the longest in modern history. The UN General Assembly has passed resolutions condemning it every year since 1992. The embargo restricts Cubans' access to medicine, food, and equipment and is widely seen as collective punishment of civilians."},
+  {rank:76,title:"Puerto Rico: Forced Sterilization & Colonialism",years:"1930s–present",region:"Latin America",tags:["CIA","Military"],president:"Multiple presidents",deaths:"Systemic oppression of 3 million U.S. citizens",country:"Puerto Rico",desc:"Between 1930–1970, U.S.-backed programs sterilized approximately one-third of Puerto Rican women — the largest forced sterilization program in U.S. history. The U.S. suppressed independence movements through COINTELPRO. Puerto Rico remains a U.S. territory with no voting representation in Congress."},
+  {rank:77,title:"U.S. Support for Israel: Gaza Operations",years:"2008–present",region:"Middle East",tags:["Military","Economic"],president:"Bush Jr., Obama, Trump, Biden",deaths:"40,000+ in Gaza (2023–2024 alone)",country:"Palestine/Gaza",desc:"The U.S. provided Israel with $260+ billion in military aid since 1948. During 2023–2024, the U.S. continued supplying 2,000-lb bombs as over 40,000 Palestinians were killed. The U.S. vetoed five UN Security Council ceasefire resolutions. Senior U.S. officials resigned in protest over weapons transfers."},
+  {rank:78,title:"CIA Support for SAVAK Torture in Iran",years:"1957–1979",region:"Middle East",tags:["CIA"],president:"Eisenhower through Carter",deaths:"Thousands tortured and killed; 1979 revolution",country:"Iran",desc:"The CIA and Mossad helped establish and train SAVAK, the Shah's notorious secret police, which tortured dissidents with electric shocks, mock executions, and sexual abuse. An estimated 3,200 people were killed, tens of thousands imprisoned. Carter praised the Shah's Iran as 'an island of stability' two years before the Islamic Revolution."},
+  {rank:79,title:"Drug War Paramilitaries in Colombia",years:"1990s–2000s",region:"Latin America",tags:["CIA","Military"],president:"Clinton, Bush Jr.",deaths:"220,000+ killed in Colombia's conflict",country:"Colombia",desc:"Under Plan Colombia, the U.S. provided $10+ billion to Colombia's military, which maintained ties to AUC paramilitaries responsible for massacres. The Colombian military's 'false positives' scandal revealed soldiers killed 6,402 civilians and dressed them in FARC uniforms to earn bonuses."},
+  {rank:80,title:"Support for Pakistani Military Despite Terror Links",years:"2001–2021",region:"Asia",tags:["Military","Economic"],president:"Bush Jr., Obama, Trump",deaths:"Billions diverted; Al-Qaeda and Taliban sheltered",country:"Pakistan",desc:"The U.S. gave Pakistan $33 billion in military aid after 9/11 even as Pakistani intelligence sheltered Taliban and al-Qaeda — including Osama bin Laden, found near Pakistan's top military academy. Pakistani nuclear scientists transferred nuclear technology to Iran, Libya, and North Korea in the worst nuclear proliferation incident in history."},
+  {rank:81,title:"Guantánamo Bay Detention Without Trial",years:"2002–present",region:"Middle East",tags:["Military","CIA"],president:"Bush Jr., Obama, Trump, Biden",deaths:"Multiple deaths; hundreds detained without charge",country:"Cuba (U.S. base)",desc:"The Guantánamo Bay detention facility has held 779 people, many without charge or trial. Military commissions have been repeatedly rejected by courts. Over 700 have been released without charge. Detainees reported widespread abuse and torture. The facility became a global symbol of post-9/11 lawlessness."},
+  {rank:82,title:"Blackwater & Nisour Square Massacre",years:"2007",region:"Middle East",tags:["Military"],president:"George W. Bush",deaths:"17 Iraqi civilians killed; 20 wounded",country:"Iraq",desc:"Blackwater security contractors opened fire without provocation on civilians at Nisour Square in Baghdad, killing 17 unarmed people. The Bush administration initially gave Blackwater immunity. The company was given $1 billion+ in State Department contracts. Founder Erik Prince later fled to Abu Dhabi."},
+  {rank:83,title:"CIA Undermining of Italian Elections",years:"1948",region:"CIA",tags:["CIA"],president:"Harry S. Truman",deaths:"Democracy subverted through covert foreign interference",country:"Italy",desc:"The CIA spent ~$10 million (equivalent to ~$120 million today) to ensure the Christian Democrats defeated Communists in Italy's 1948 elections. The CIA created fake front organizations, distributed millions of propaganda letters, and threatened to cut off Marshall Plan aid. It established the template for U.S. electoral interference worldwide."},
+  {rank:84,title:"Mossadegh Coup Chain: Iran to Islamic Revolution",years:"1953→1979",region:"Middle East",tags:["CIA"],president:"Eisenhower → Carter",deaths:"Millions across decades of regional instability",country:"Iran",desc:"The 1953 CIA coup against Mossadegh installed the Shah, whose brutality created revolutionary pressure, which brought Khomeini to power, who fueled Hezbollah, Hamas, regional proxy wars, and decades of U.S.-Iran enmity. The Middle East's current configuration is substantially a consequence of one CIA operation."},
+  {rank:85,title:"Internment of Japanese Americans",years:"1942–1945",region:"Military",tags:["Military"],president:"Franklin D. Roosevelt",deaths:"1,800+ deaths; 120,000 imprisoned without charge",country:"USA",desc:"President Roosevelt's Executive Order 9066 forced 120,000 Japanese Americans — two-thirds U.S. citizens — into internment camps. They lost homes, businesses, and property. The Supreme Court upheld the internment in Korematsu v. United States. Scholars documented that military officials knew the internment was unjustified."},
+  {rank:86,title:"U.S. Support for Bahrain Crackdown",years:"2011",region:"Middle East",tags:["Military","Economic"],president:"Barack Obama",deaths:"Hundreds killed and tortured; movement crushed",country:"Bahrain",desc:"When Bahrain's Shia majority rose up demanding democratic reforms in 2011, the U.S. said nothing as Saudi Arabia sent troops to help violently suppress the protests. The U.S. maintained its Fifth Fleet headquarters in Bahrain throughout the crackdown. The contrast with U.S. calls for reform elsewhere was widely noted."},
+  {rank:87,title:"The 1980 October Surprise",years:"1980",region:"Middle East",tags:["CIA"],president:"Ronald Reagan",deaths:"52 hostages held 444 days; Iran-Contra arms flow began",country:"Iran/USA",desc:"Evidence suggests Reagan campaign officials secretly negotiated with Iran to delay release of 52 American hostages until after the 1980 election, ensuring Carter's defeat. In exchange, Iran received weapons via Israel — beginning the Iran-Contra arms flow. The hostages were released 20 minutes after Reagan's inauguration."},
+  {rank:88,title:"USAID Regime Change Operations in Cuba",years:"2009–2014",region:"Latin America",tags:["CIA","Economic"],president:"Barack Obama",deaths:"Subversion of a sovereign nation",country:"Cuba",desc:"USAID secretly ran programs to create 'Cuban Twitter' (ZunZuneo) to organize anti-government protests and sent Latin Americans into Cuba posing as health workers to recruit dissidents. The program gave 'training in agitation and penetration of civil society' without informing participants they worked for the U.S. government."},
+  {rank:89,title:"Waco Siege (FBI/ATF Branch Davidian Assault)",years:"1993",region:"CIA",tags:["Military"],president:"Bill Clinton",deaths:"76 killed including 25 children",country:"USA",desc:"A 51-day standoff ended on April 19, 1993 when ATF and FBI tanks inserted CS tear gas — banned in warfare — into areas where children were sheltering. Fire broke out and 76 people died, including 25 children and two pregnant women. An independent investigation criticized the government's tactical decisions."},
+  {rank:90,title:"Iraqi Museum & Archaeological Looting",years:"2003",region:"Middle East",tags:["Military"],president:"George W. Bush",deaths:"Destruction of 7,000 years of human civilization",country:"Iraq",desc:"When U.S. forces entered Baghdad in 2003, they protected the Oil Ministry while allowing the Iraqi National Museum — containing 170,000 artifacts representing 7,000 years of Mesopotamian civilization — to be looted. 15,000 objects were stolen. Much was irreplaceable."},
+  {rank:91,title:"Use of White Phosphorus in Civilian Areas",years:"2004, 2009",region:"Middle East",tags:["Military"],president:"Bush Jr., Obama",deaths:"Unknown civilians burned",country:"Iraq, Afghanistan",desc:"U.S. forces used white phosphorus in populated areas during the Second Battle of Fallujah. White phosphorus burns at 815°C, ignites on contact with skin, and cannot be extinguished with water. Its use in civilian areas is prohibited under the Convention on Certain Conventional Weapons."},
+  {rank:92,title:"Abandonment of Afghanistan & Taliban Rise (1992)",years:"1992",region:"Middle East",tags:["CIA","Military"],president:"George H.W. Bush",deaths:"Civil war killed 50,000+ Kabul residents; Taliban rise",country:"Afghanistan",desc:"After the Soviet withdrawal, the U.S. abruptly cut all support to the Afghan government. The resulting civil war destroyed Kabul. Najibullah was tortured and publicly hanged by the Taliban in 1996. The destruction created conditions for the Taliban's rise — direct blowback of U.S. using Afghanistan as a Cold War proxy battlefield."},
+  {rank:93,title:"Assassination of Iranian General Soleimani",years:"2020",region:"Middle East",tags:["Drone","Military"],president:"Donald Trump",deaths:"10 killed; near-war with Iran",country:"Iraq",desc:"A U.S. drone strike at Baghdad Airport killed Iranian General Soleimani on Iraqi sovereign territory without Iraqi consent. Iraq's parliament voted to expel U.S. forces. Iran retaliated with ballistic missiles injuring over 100 American troops. The operation's legal basis was never clearly articulated."},
+  {rank:94,title:"The Collateral Murder Video (Baghdad Airstrike)",years:"2007",region:"Middle East",tags:["Military"],president:"George W. Bush",deaths:"12+ killed including Reuters journalists",country:"Iraq",desc:"A classified video leaked by Chelsea Manning showed a U.S. Apache helicopter crew killing 12 people in Baghdad, including two Reuters journalists, while heard laughing. When a van arrived to help wounded, they fired again, wounding two children inside. Manning was sentenced to 35 years; the pilot faced no consequences."},
+  {rank:95,title:"Ukraine Destabilization Legacy (Maidan)",years:"2014",region:"CIA",tags:["CIA","Economic"],president:"Barack Obama",deaths:"Contributed to ongoing Ukraine conflict",country:"Ukraine",desc:"Intercepted calls showed U.S. officials explicitly choosing Ukraine's new government before the Maidan protests concluded. The U.S. invested $5 billion in Ukrainian civil society preceding the uprising. The subsequent Russian annexation of Crimea and war in eastern Ukraine has killed tens of thousands."},
+  {rank:96,title:"The Afghanistan Papers: 20 Years of Lies",years:"2001–2021",region:"Middle East",tags:["Military"],president:"Bush Jr., Obama, Trump, Biden",deaths:"241,000+ direct deaths; $2+ trillion wasted",country:"Afghanistan",desc:"The Afghanistan Papers — confidential documents obtained by the Washington Post — revealed three administrations systematically lied to the American public about war progress. Officials privately admitted no clear strategy, no measureable progress, systemic corruption, and that the war could not be won. They gave optimistic assessments publicly for 20 years."},
+  {rank:97,title:"Proxy War and State Collapse in Libya Post-2011",years:"2011–present",region:"Africa",tags:["Military","CIA"],president:"Obama, Trump, Biden",deaths:"Ongoing civil war; tens of thousands killed",country:"Libya",desc:"After the 2011 bombing destroyed the Libyan state, the U.S. failed to stabilize the country. Libya became a weapons warehouse arming militias across Africa and the Middle East. ISIS established a Libyan franchise. Open-air slave markets emerged. The country remains fractured with no unified government."},
+  {rank:98,title:"NSA Global Mass Surveillance (PRISM/XKeyscore)",years:"2001–present",region:"CIA",tags:["CIA"],president:"Bush Jr., Obama, Trump, Biden",deaths:"Civil liberties of billions violated",country:"Global",desc:"Revealed by Edward Snowden in 2013, the NSA was secretly collecting all Americans' phone records, storing internet communications worldwide, and tapping 35 world leaders' phones including allies. Snowden was charged under the Espionage Act and forced into exile in Russia. He has never been tried."},
+  {rank:99,title:"Support for Saudi Arabia's Repression at Home",years:"1945–present",region:"Middle East",tags:["Military","Economic"],president:"Multiple presidents",deaths:"Thousands executed; dissidents imprisoned globally",country:"Saudi Arabia",desc:"The U.S. has maintained an unconditional alliance with the Saudi monarchy since 1945, selling $200+ billion in weapons. The Saudi government has beheaded people for apostasy, witchcraft, and drug offenses; imprisoned women's rights activists; and murdered journalist Jamal Khashoggi. Trump downplayed the Khashoggi murder to maintain a $110 billion arms deal."},
+  {rank:100,title:"The Forever War: $8 Trillion, Zero Accountability",years:"2001–2021",region:"Middle East",tags:["Military","CIA"],president:"Bush Jr., Obama, Trump, Biden",deaths:"900,000+ killed in post-9/11 wars (Brown University)",country:"Afghanistan, Iraq, Pakistan, Syria, Yemen, Somalia, Libya",desc:"Brown University's Costs of War Project documented 900,000 deaths and $8 trillion spent across all post-9/11 wars. Not a single senior official has faced prosecution for war crimes, illegal surveillance, torture, or the intelligence failures that enabled 9/11. The architects of these wars gave TED talks, wrote memoirs, and received Presidential Medals of Freedom."}
+];
+
+// ─── CATEGORY CONFIG ──────────────────────────────────────────────────────
+const CAT = {
+  Military:     {bg:"#1a0808",accent:"#8b1a1a",text:"#ff6b6b",sym:"⟁"},
+  CIA:          {bg:"#080820",accent:"#1a1a8b",text:"#6b8bff",sym:"◈"},
+  Nuclear:      {bg:"#1a1a08",accent:"#7a7a10",text:"#eded50",sym:"⊛"},
+  Drone:        {bg:"#081a08",accent:"#1a6b1a",text:"#6bff8b",sym:"⊕"},
+  Economic:     {bg:"#101008",accent:"#4a4a10",text:"#c8c860",sym:"⊗"},
+  "Latin America":{bg:"#1a0810",accent:"#8b1a40",text:"#ff6b9b",sym:"◆"},
+  "Middle East":{bg:"#1a0c00",accent:"#8b5500",text:"#ffaa40",sym:"◇"},
+  Asia:         {bg:"#001a1a",accent:"#005555",text:"#40d0d0",sym:"△"},
+  Africa:       {bg:"#100c00",accent:"#604800",text:"#d0a040",sym:"◉"},
+};
+function getCat(ev){return CAT[ev.tags[0]]||CAT[ev.region]||{bg:"#0d0d0d",accent:"#333",text:"#888",sym:"◉"};}
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+const svgCache = {};       // rank → svg string
+let completed = 0;
+let activeFilter = 'all';
+
+// ─── FALLBACK BG SVG ──────────────────────────────────────────────────────
+function makeFallbackSVG(ev){
+  const c = getCat(ev);
+  const s = ev.rank * 137.508;
+  let shapes = '';
+  for(let i=0;i<6;i++){
+    const angle = ((s*(i+1))%360)*(Math.PI/180);
+    const r = 20+((s*(i+2))%45);
+    const cx = 50+Math.cos(angle)*28;
+    const cy = 50+Math.sin(angle)*22;
+    const op = (0.04+i*0.014).toFixed(3);
+    const t = i%3;
+    if(t===0) shapes+=`<circle cx="${cx}%" cy="${cy}%" r="${r}" fill="${c.accent}" fill-opacity="${op}"/>`;
+    else if(t===1) shapes+=`<rect x="${cx-r/2}%" y="${cy-r/2}%" width="${r}" height="${r}" fill="${c.accent}" fill-opacity="${op}" transform="rotate(${(angle*40).toFixed(1)},150,100)"/>`;
+    else shapes+=`<polygon points="${cx}%,${(cy-r/2).toFixed(1)}% ${(cx+r/2).toFixed(1)}%,${(cy+r/2).toFixed(1)}% ${(cx-r/2).toFixed(1)}%,${(cy+r/2).toFixed(1)}%" fill="${c.accent}" fill-opacity="${op}"/>`;
+  }
+  const rank=ev.rank % 100;
+  return `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="300" height="200" fill="${c.bg}"/>
+  <pattern id="g${ev.rank}" width="20" height="20" patternUnits="userSpaceOnUse">
+    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="${c.accent}" stroke-width="0.3" stroke-opacity="0.3"/>
+  </pattern>
+  <rect width="300" height="200" fill="url(#g${ev.rank})"/>
+  ${shapes}
+  <line x1="0" y1="0" x2="300" y2="200" stroke="${c.accent}" stroke-width="0.5" stroke-opacity="0.12"/>
+  <line x1="300" y1="0" x2="0" y2="200" stroke="${c.accent}" stroke-width="0.5" stroke-opacity="0.12"/>
+  <text x="150" y="115" font-family="Georgia,serif" font-size="80" font-weight="900" fill="${c.text}" fill-opacity="0.09" text-anchor="middle" dominant-baseline="middle">${rank===0?100:rank}</text>
+</svg>`;
+}
+
+// ─── BUILD CARD ───────────────────────────────────────────────────────────
+function buildCard(ev){
+  const c = getCat(ev);
+  const card = document.createElement('div');
+  card.className='card';
+  card.id=`card-${ev.rank}`;
+  card.setAttribute('data-tags', ev.tags.join(','));
+  card.setAttribute('data-region', ev.region);
+  card.setAttribute('data-search', `${ev.title} ${ev.president} ${ev.country} ${ev.desc}`.toLowerCase());
+
+  const fallbackSVG = makeFallbackSVG(ev);
+
+  card.innerHTML=`
+    <div class="card-img-wrap" id="imgwrap-${ev.rank}">
+      <div class="fallback-bg">${fallbackSVG}</div>
+      <div class="svg-overlay" id="overlay-${ev.rank}" style="display:none"></div>
+      <div class="svg-shimmer" id="shimmer-${ev.rank}">
+        <div class="shimmer-icon" style="color:${c.text}">${c.sym}</div>
+        <div class="shimmer-bar" style="background:linear-gradient(90deg,${c.accent}44,${c.text}88,${c.accent}44);background-size:200% 100%;"></div>
+      </div>
+      <div class="card-rank">#${ev.rank}</div>
+      <div class="card-era">${ev.years}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${ev.title}</div>
+      <div class="card-desc">${ev.desc.substring(0,130)}…</div>
+      <div class="card-footer">
+        <span class="card-pres">⚑ ${ev.president.split(',')[0].split('/')[0].trim()}</span>
+        <span class="card-tag">${ev.tags[0]}</span>
+      </div>
+    </div>`;
+
+  card.onclick=()=>openModal(ev.rank-1);
+  return card;
+}
+
+function injectSVG(rank, svgStr){
+  const overlay = document.getElementById(`overlay-${rank}`);
+  const shimmer = document.getElementById(`shimmer-${rank}`);
+  if(!overlay) return;
+  // Scale SVG to fit
+  const scaled = svgStr.replace('<svg','<svg width="100%" height="100%" style="position:absolute;inset:0" ');
+  overlay.innerHTML = scaled;
+  overlay.style.display='flex';
+  if(shimmer) shimmer.style.display='none';
+  // Same for modal if open
+  const mOverlay = document.getElementById(`modal-svg-overlay-${rank}`);
+  const mShimmer = document.getElementById(`modal-shimmer-${rank}`);
+  if(mOverlay){
+    mOverlay.innerHTML = scaled;
+    mOverlay.style.display='flex';
+    if(mShimmer) mShimmer.style.display='none';
+  }
+}
+
+// ─── GENERATE SVG via local proxy ─────────────────────────────────────────
+async function generateSVG(ev){
+  const c = getCat(ev);
+  const prompt = `Create a minimalist geometric abstract SVG illustration for this historical event:
+Event: "${ev.title}" (${ev.years})
+Category: ${ev.tags[0]} | Region: ${ev.region}
+Brief context: ${ev.desc.substring(0,120)}
+
+Requirements:
+- ViewBox exactly "0 0 300 200", no XML declaration, no comments
+- Bauhaus/constructivist geometric abstract style — symbolic NOT literal
+- Colors ONLY: background transparent or very dark, shapes in ${c.accent} and ${c.text} with varying opacities (0.1–0.9)
+- 5–9 geometric shapes: circles, rectangles, triangles, lines, polygons
+- Abstractly SUGGEST the event theme: e.g. radiating rings for nuclear, converging arrows for invasion, fragmented shards for massacre, eye/surveillance shapes for CIA, chains for occupation
+- NO text, NO labels, NO human figures, NO flags
+- Stark and powerful composition
+
+Return ONLY the SVG element: <svg ...>...</svg>`;
+
+  const payload = {
+    model:"claude-sonnet-4-20250514",
+    max_tokens:900,
+    messages:[{role:"user",content:prompt}]
+  };
+
+  const res = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "x-api-key": ANTHROPIC_KEY,
+      "anthropic-version":"2023-06-01"
+    },
+    body:JSON.stringify(payload)
+  });
+
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  const text = data.content?.[0]?.text||"";
+  const match = text.match(/<svg[\s\S]*?<\/svg>/i);
+  return match ? match[0] : null;
+}
+
+// ─── BATCH GENERATOR ─────────────────────────────────────────────────────
+async function generateAll(){
+  const BATCH = 5;
+  for(let i=0;i<EVENTS.length;i+=BATCH){
+    const batch = EVENTS.slice(i,i+BATCH);
+    await Promise.all(batch.map(async(ev)=>{
+      try{
+        document.getElementById('progressTitle').textContent=ev.title;
+        const svg = await generateSVG(ev);
+        if(svg){
+          svgCache[ev.rank]=svg;
+          injectSVG(ev.rank,svg);
+        }
+      }catch(e){
+        console.warn(`#${ev.rank} failed:`,e.message);
+      }
+      completed++;
+      document.getElementById('progressBar').style.width=`${(completed/EVENTS.length)*100}%`;
+      document.getElementById('progressCount').textContent=`${completed} / ${EVENTS.length}`;
+    }));
+  }
+  document.getElementById('progressWrap').style.opacity='0.4';
+  document.getElementById('progressTitle').textContent='All illustrations complete ✓';
+}
+
+// ─── FILTER / SEARCH ─────────────────────────────────────────────────────
+function setFilter(f, btn){
+  activeFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+function filterCards(){
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  let count=0;
+  document.querySelectorAll('.card').forEach(card=>{
+    const tags=card.getAttribute('data-tags');
+    const region=card.getAttribute('data-region');
+    const search=card.getAttribute('data-search');
+    const tagMatch=activeFilter==='all'||tags.includes(activeFilter)||region===activeFilter;
+    const searchMatch=!q||search.includes(q);
+    if(tagMatch&&searchMatch){card.classList.remove('hidden');count++;}
+    else{card.classList.add('hidden');}
+  });
+  document.getElementById('resultsCount').textContent=`${count} events`;
+  document.getElementById('noResults').style.display=count===0?'block':'none';
+}
+
+// ─── MODAL ────────────────────────────────────────────────────────────────
+function openModal(idx){
+  const ev=EVENTS[idx];
+  const c=getCat(ev);
+  const fallbackSVG=makeFallbackSVG(ev);
+  const hasSVG=!!svgCache[ev.rank];
+  const svgScaled=hasSVG?svgCache[ev.rank].replace('<svg','<svg width="100%" height="100%" style="position:absolute;inset:0" '):'';
+
+  document.getElementById('modalInner').innerHTML=`
+    <div class="modal-img-wrap" style="height:280px">
+      <div class="fallback-bg" style="position:absolute;inset:0">${fallbackSVG.replace('viewBox="0 0 300 200"','viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"')}</div>
+      <div class="svg-overlay" id="modal-svg-overlay-${ev.rank}" style="${hasSVG?'display:flex':'display:none'}">${svgScaled}</div>
+      <div class="svg-shimmer" id="modal-shimmer-${ev.rank}" style="${hasSVG?'display:none':''}">
+        <div class="shimmer-icon" style="color:${c.text};font-size:42px">${c.sym}</div>
+        <div class="shimmer-bar" style="width:80px;height:2px;background:linear-gradient(90deg,${c.accent}44,${c.text}88,${c.accent}44)"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-eyebrow">Event #${ev.rank} of 100 · ${ev.region}</div>
+      <div class="modal-title">${ev.title}</div>
+      <div class="modal-years">${ev.years}</div>
+      <div class="modal-meta">
+        <div><span class="meta-label">President(s)</span><span class="meta-value">${ev.president}</span></div>
+        <div><span class="meta-label">Country / Region</span><span class="meta-value">${ev.country}</span></div>
+        <div><span class="meta-label">Deaths / Impact</span><span class="meta-value">${ev.deaths}</span></div>
+        <div><span class="meta-label">Category</span><span class="meta-value">${ev.tags.join(', ')}</span></div>
+      </div>
+      <div class="modal-desc">${ev.desc}</div>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+(function init(){
+  const grid=document.getElementById('cardGrid');
+  EVENTS.forEach(ev=>grid.appendChild(buildCard(ev)));
+  document.getElementById('resultsCount').textContent='100 events';
+
+  // Stagger animation delays
+  document.querySelectorAll('.card').forEach((c,i)=>{c.style.animationDelay=`${Math.min(i,10)*0.04}s`;});
+
+  generateAll();
+})();
+</script>
+</body>
+</html>
